@@ -1,5 +1,6 @@
 ﻿using System.Reactive;
-using System.Threading.Tasks;
+using System.Reactive.Concurrency;
+using System.Windows.Threading;
 using ReactiveUI;
 
 namespace SolutionBuilder
@@ -12,7 +13,7 @@ namespace SolutionBuilder
         public MainWindowViewModel(IUserInteractionManager userInteractionManager)
         {
             mUserInteractionManager = userInteractionManager;
-            OpenCommand = ReactiveCommand.CreateFromTask(_Open);
+            OpenCommand = ReactiveCommand.Create(_Open, outputScheduler: new DispatcherScheduler(Dispatcher.CurrentDispatcher));
         }
 
         public ReactiveCommand<Unit, Unit> OpenCommand { get; }
@@ -23,7 +24,7 @@ namespace SolutionBuilder
             private set => this.RaiseAndSetIfChanged(ref mSolution, value);
         }
 
-        private async Task _Open()
+        private void _Open()
         {
             var file = mUserInteractionManager.PromptToOpenSolution();
             if (file == null)
@@ -31,20 +32,8 @@ namespace SolutionBuilder
                 return;
             }
 
-            var sln = await SolutionViewModel.LoadFile(file);
+            var sln = SolutionViewModel.LoadFile(file);
             Solution = sln;
-        }
-    }
-
-    public sealed class SolutionViewModel : ReactiveObject
-    {
-        private SolutionViewModel()
-        {
-        }
-
-        public static Task<SolutionViewModel> LoadFile(string file)
-        {
-            return Task.FromResult(new SolutionViewModel());
         }
     }
 }
