@@ -1,27 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Microsoft.Win32;
 
 namespace SolutionBuilder
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IUserInteractionManager
     {
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowViewModel(this);
+        }
+
+        public string PromptToOpenSolution()
+        {
+            var ofd = new OpenFileDialog
+            {
+                Filter = "Visual Studio Solutions|*.sln",
+                RestoreDirectory = true
+            };
+
+            if (ofd.ShowDialog(this) ?? false)
+            {
+                return ofd.FileName;
+            }
+
+            return null;
+        }
+
+        public string PromptToSaveSolution(string initialDirectory)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Filter = "Visual Studio Solution|*.sln",
+                InitialDirectory = initialDirectory,
+                OverwritePrompt = true
+            };
+
+            if (sfd.ShowDialog(this) ?? false)
+            {
+                return sfd.FileName;
+            }
+
+            return null;
         }
     }
 }
