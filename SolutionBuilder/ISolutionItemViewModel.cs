@@ -17,6 +17,11 @@ namespace SolutionBuilder
             set;
         }
 
+        bool MatchesFilter
+        {
+            get;
+        }
+
         string Name
         {
             get;

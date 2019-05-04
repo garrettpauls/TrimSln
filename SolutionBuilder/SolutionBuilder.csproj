@@ -53,10 +53,12 @@
     </ApplicationDefinition>
     <Compile Include="FolderViewModel.cs" />
     <Compile Include="ISolutionItemViewModel.cs" />
+    <Compile Include="ProjectFilter.cs" />
     <Compile Include="ProjectTypeIds.cs" />
     <Compile Include="ProjectViewModel.cs" />
     <Compile Include="SolutionViewModel.cs" />
     <Compile Include="SolutionWriter.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

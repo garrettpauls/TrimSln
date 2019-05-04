@@ -1,4 +1,5 @@
-﻿using Onion.SolutionParser.Parser.Model;
+﻿using System;
+using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
 
 namespace SolutionBuilder
@@ -7,15 +8,12 @@ namespace SolutionBuilder
     {
         private bool mIsExpanded;
         private bool? mIsIncluded = false;
+        private bool mMatchesFilter = true;
 
-        public ProjectViewModel(Project project)
+        public ProjectViewModel(Project project, IObservable<ProjectFilter> filter)
         {
             Project = project;
-        }
-
-        public Project Project
-        {
-            get;
+            filter.Subscribe(f => MatchesFilter = f.Matches(project));
         }
 
         public bool IsExpanded
@@ -30,6 +28,17 @@ namespace SolutionBuilder
             set => this.RaiseAndSetIfChanged(ref mIsIncluded, value);
         }
 
+        public bool MatchesFilter
+        {
+            get => mMatchesFilter;
+            private set => this.RaiseAndSetIfChanged(ref mMatchesFilter, value);
+        }
+
         public string Name => Project.Name;
+
+        public Project Project
+        {
+            get;
+        }
     }
 }

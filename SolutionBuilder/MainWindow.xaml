@@ -26,6 +26,13 @@
             </StackPanel>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <TextBox VerticalAlignment="Center" Width="300"
+                     Text="{Binding Solution.Filter.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     mah:TextBoxHelper.Watermark="Search" mah:TextBoxHelper.ClearTextButton="True" />
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
@@ -61,6 +68,8 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
                     <Setter Property="Focusable" Value="False" />
+                    <Setter Property="Visibility"
+                            Value="{Binding MatchesFilter, Converter={StaticResource ConvertBooleanToVisibleCollapsed}}" />
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Onion.SolutionParser.Parser;
@@ -31,10 +32,12 @@ namespace SolutionBuilder
                 .Select(proj => (proj, childToParent.TryGetValue(proj.Guid, out var parentId) ? parentId : (Guid?)null))
                 .ToArray();
 
+            var filter = Filter.Changed.Select(x => (ProjectFilter) x.Sender);
+
             Projects = solution
                 .Projects
                 .Where(proj => !childToParent.ContainsKey(proj.Guid))
-                .Select(proj => CreateItemViewModel(proj, allProjects))
+                .Select(proj => CreateItemViewModel(proj, allProjects, filter))
                 .ToArray();
         }
 
@@ -42,6 +45,8 @@ namespace SolutionBuilder
         {
             get;
         }
+
+        public ProjectFilter Filter { get; } = new ProjectFilter();
 
         public ISolutionItemViewModel[] Projects
         {
@@ -167,14 +172,17 @@ namespace SolutionBuilder
             return (Guid.Parse(item.Key), Guid.Parse(item.Value));
         }
 
-        public static ISolutionItemViewModel CreateItemViewModel(Project project, IReadOnlyCollection<(Project project, Guid? parentId)> allProjects)
+        public static ISolutionItemViewModel CreateItemViewModel(
+            Project project,
+            IReadOnlyCollection<(Project project, Guid? parentId)> allProjects,
+            IObservable<ProjectFilter> filter)
         {
             if (project.TypeGuid == ProjectTypeIds.Folder)
             {
-                return new FolderViewModel(project, allProjects);
+                return new FolderViewModel(project, allProjects, filter);
             }
 
-            return new ProjectViewModel(project);
+            return new ProjectViewModel(project, filter);
         }
 
         public static SolutionViewModel LoadFile(string file)

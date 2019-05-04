@@ -10,25 +10,32 @@ namespace SolutionBuilder
     public sealed class FolderViewModel : ReactiveObject, ISolutionItemViewModel
     {
         private bool mIsExpanded;
+        private bool mMatchesFilter;
 
-        public FolderViewModel(Project project, IReadOnlyCollection<(Project project, Guid? parentId)> allProjects)
+        public FolderViewModel(
+            Project project,
+            IReadOnlyCollection<(Project project, Guid? parentId)> allProjects,
+            IObservable<ProjectFilter> filter)
         {
             Project = project;
 
             Children = allProjects
                 .Where(x => x.parentId == project.Guid)
-                .Select(x => SolutionViewModel.CreateItemViewModel(x.project, allProjects))
+                .Select(x => SolutionViewModel.CreateItemViewModel(x.project, allProjects, filter))
                 .ToArray();
-            Children.AsObservableChangeSet()
+            var childChanges = Children.AsObservableChangeSet();
+            childChanges
                 .AutoRefresh(x => x.IsIncluded)
-                .Subscribe(x => this.RaisePropertyChanged(nameof(IsIncluded)));
+                .Subscribe(_ => this.RaisePropertyChanged(nameof(IsIncluded)));
+            childChanges
+                .AutoRefresh(x => x.MatchesFilter)
+                .Subscribe(_ => MatchesFilter = Children.Any(child => child.MatchesFilter));
         }
 
         public ISolutionItemViewModel[] Children
         {
             get;
         }
-
 
         public bool IsExpanded
         {
@@ -67,6 +74,12 @@ namespace SolutionBuilder
                     }
                 }
             }
+        }
+
+        public bool MatchesFilter
+        {
+            get => mMatchesFilter;
+            private set => this.RaiseAndSetIfChanged(ref mMatchesFilter, value);
         }
 
         public string Name => Project.Name;
