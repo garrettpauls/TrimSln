@@ -51,6 +51,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FolderViewModel.cs" />
+    <Compile Include="ISolutionItemViewModel.cs" />
+    <Compile Include="ProjectTypeIds.cs" />
+    <Compile Include="ProjectViewModel.cs" />
     <Compile Include="SolutionViewModel.cs" />
     <Compile Include="SolutionWriter.cs" />
     <Page Include="MainWindow.xaml">

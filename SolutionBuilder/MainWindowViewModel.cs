@@ -1,6 +1,5 @@
 ﻿using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Windows.Threading;
 using ReactiveUI;
 
 namespace SolutionBuilder
@@ -13,7 +12,7 @@ namespace SolutionBuilder
         public MainWindowViewModel(IUserInteractionManager userInteractionManager)
         {
             mUserInteractionManager = userInteractionManager;
-            OpenCommand = ReactiveCommand.Create(_Open, outputScheduler: new DispatcherScheduler(Dispatcher.CurrentDispatcher));
+            OpenCommand = ReactiveCommand.Create(_Open, outputScheduler: DispatcherScheduler.Current);
         }
 
         public ReactiveCommand<Unit, Unit> OpenCommand { get; }
