@@ -1,9 +1,9 @@
-﻿using System.Windows;
+﻿using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
 namespace SolutionBuilder
 {
-    public partial class MainWindow : Window, IUserInteractionManager
+    public partial class MainWindow : MetroWindow, IUserInteractionManager
     {
         public MainWindow()
         {
