@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using System.Windows.Input;
+using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
 namespace SolutionBuilder
@@ -42,6 +43,11 @@ namespace SolutionBuilder
             }
 
             return null;
+        }
+
+        private void _HandleSearch(object sender, ExecutedRoutedEventArgs e)
+        {
+            mSearchBox.Focus();
         }
     }
 }

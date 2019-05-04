@@ -40,6 +40,7 @@ namespace SolutionBuilder
                 .Projects
                 .Where(proj => !childToParent.ContainsKey(proj.Guid))
                 .Select(proj => CreateItemViewModel(proj, allProjects, filter))
+                .OrderBy(proj => proj.Name)
                 .ToArray();
 
             CollapseCommand = ReactiveCommand.Create(() => _ForEachProject(vm => vm.IsExpanded = false), outputScheduler: DispatcherScheduler.Current);

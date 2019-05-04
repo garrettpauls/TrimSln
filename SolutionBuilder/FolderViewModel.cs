@@ -4,12 +4,13 @@ using System.Linq;
 using DynamicData;
 using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
+using SolutionBuilder.Properties;
 
 namespace SolutionBuilder
 {
     public sealed class FolderViewModel : ReactiveObject, ISolutionItemViewModel
     {
-        private bool mIsExpanded = true;
+        private bool mIsExpanded = Settings.Default.ExpandedByDefault;
         private bool mMatchesFilter;
 
         public FolderViewModel(
@@ -22,6 +23,7 @@ namespace SolutionBuilder
             Children = allProjects
                 .Where(x => x.parentId == project.Guid)
                 .Select(x => SolutionViewModel.CreateItemViewModel(x.project, allProjects, filter))
+                .OrderBy(x => x.Name)
                 .ToArray();
             var childChanges = Children.AsObservableChangeSet();
             childChanges

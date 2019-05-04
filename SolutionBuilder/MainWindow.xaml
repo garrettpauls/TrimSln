@@ -36,22 +36,23 @@
                     <iconPacks:PackIconMaterial Kind="ArrowCollapseVertical" />
                 </Button>
             </StackPanel>
-            <TextBox VerticalAlignment="Center" Width="300"
+            <TextBox VerticalAlignment="Center" Width="300" x:Name="mSearchBox"
                      Text="{Binding Solution.Filter.SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     mah:TextBoxHelper.Watermark="Search" mah:TextBoxHelper.ClearTextButton="True" />
+                     mah:TextBoxHelper.Watermark="Search (Ctrl+F)" mah:TextBoxHelper.ClearTextButton="True" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveCommand}" />
+        <KeyBinding Key="F" Modifiers="Control" Command="Search" />
+        <KeyBinding Key="E" Modifiers="Control" Command="Search" />
     </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Search" Executed="_HandleSearch" />
+    </Window.CommandBindings>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TreeView Grid.Row="1" ItemsSource="{Binding Solution.Projects}">
+        <TreeView ItemsSource="{Binding Solution.Projects}">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:FolderViewModel}" ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
@@ -81,5 +82,14 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal"
+                    Visibility="{Binding Solution, Converter={StaticResource ConvertNullToVisible}}">
+            <iconPacks:PackIconMaterial Kind="SubdirectoryArrowLeft" RenderTransformOrigin="0.5,0.5" Margin="12 10 4 4">
+                <iconPacks:PackIconMaterial.RenderTransform>
+                    <RotateTransform Angle="90" />
+                </iconPacks:PackIconMaterial.RenderTransform>
+            </iconPacks:PackIconMaterial>
+            <TextBlock Text="Open a solution" FontSize="16" Margin="0 12 0 0" />
+        </StackPanel>
     </Grid>
 </mah:MetroWindow>

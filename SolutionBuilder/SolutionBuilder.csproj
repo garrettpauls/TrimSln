@@ -55,6 +55,7 @@
     </ApplicationDefinition>
     <Compile Include="FolderViewModel.cs" />
     <Compile Include="ISolutionItemViewModel.cs" />
+    <Compile Include="NullToVisibilityConverter.cs" />
     <Compile Include="ProjectFilter.cs" />
     <Compile Include="ProjectTypeIds.cs" />
     <Compile Include="ProjectViewModel.cs" />
