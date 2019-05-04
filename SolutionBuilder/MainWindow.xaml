@@ -28,6 +28,14 @@
     </mah:MetroWindow.LeftWindowCommands>
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding Solution.ExpandCommand}">
+                    <iconPacks:PackIconMaterial Kind="ArrowExpandVertical" />
+                </Button>
+                <Button Command="{Binding Solution.CollapseCommand}">
+                    <iconPacks:PackIconMaterial Kind="ArrowCollapseVertical" />
+                </Button>
+            </StackPanel>
             <TextBox VerticalAlignment="Center" Width="300"
                      Text="{Binding Solution.Filter.SearchText, UpdateSourceTrigger=PropertyChanged}"
                      mah:TextBoxHelper.Watermark="Search" mah:TextBoxHelper.ClearTextButton="True" />

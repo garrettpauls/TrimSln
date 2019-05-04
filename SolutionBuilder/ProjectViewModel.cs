@@ -6,7 +6,6 @@ namespace SolutionBuilder
 {
     public sealed class ProjectViewModel : ReactiveObject, ISolutionItemViewModel
     {
-        private bool mIsExpanded;
         private bool? mIsIncluded = false;
         private bool mMatchesFilter = true;
 
@@ -19,7 +18,7 @@ namespace SolutionBuilder
         public bool IsExpanded
         {
             get => false;
-            set => this.RaiseAndSetIfChanged(ref mIsExpanded, value);
+            set { }
         }
 
         public bool? IsIncluded

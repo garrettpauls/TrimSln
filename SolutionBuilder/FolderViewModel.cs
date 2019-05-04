@@ -9,7 +9,7 @@ namespace SolutionBuilder
 {
     public sealed class FolderViewModel : ReactiveObject, ISolutionItemViewModel
     {
-        private bool mIsExpanded;
+        private bool mIsExpanded = true;
         private bool mMatchesFilter;
 
         public FolderViewModel(

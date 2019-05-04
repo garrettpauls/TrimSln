@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +41,14 @@ namespace SolutionBuilder
                 .Where(proj => !childToParent.ContainsKey(proj.Guid))
                 .Select(proj => CreateItemViewModel(proj, allProjects, filter))
                 .ToArray();
+
+            CollapseCommand = ReactiveCommand.Create(() => _ForEachProject(vm => vm.IsExpanded = false), outputScheduler: DispatcherScheduler.Current);
+            ExpandCommand = ReactiveCommand.Create(() => _ForEachProject(vm => vm.IsExpanded = true), outputScheduler: DispatcherScheduler.Current);
         }
+
+        public ReactiveCommand<Unit, Unit> CollapseCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ExpandCommand { get; }
 
         public string FilePath
         {
@@ -65,6 +74,27 @@ namespace SolutionBuilder
                     foreach (var child in folder.Children.SelectMany(Flatten))
                     {
                         yield return child;
+                    }
+                }
+            }
+        }
+
+        private void _ForEachProject(Action<ISolutionItemViewModel> action)
+        {
+            foreach (var item in Projects)
+            {
+                ForEachProject(item);
+            }
+
+            void ForEachProject(ISolutionItemViewModel item)
+            {
+                action(item);
+
+                if (item is FolderViewModel folder)
+                {
+                    foreach (var child in folder.Children)
+                    {
+                        ForEachProject(child);
                     }
                 }
             }
