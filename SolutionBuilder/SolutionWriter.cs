@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Onion.SolutionParser.Parser.Model;
 
@@ -62,14 +61,12 @@ namespace SolutionBuilder
         {
             foreach (var project in projects)
             {
-                var guid = _FormatGuid(project.Guid);
-                var typeGuid = _FormatGuid(project.TypeGuid);
+                var guid = Format(project.Guid);
+                var typeGuid = Format(project.TypeGuid);
                 await writer.WriteLineAsync($@"Project(""{typeGuid}"") = ""{project.Name}"", ""{project.Path}"", ""{guid}""");
                 await _WriteProjectSection(writer, project.ProjectSection);
                 await writer.WriteLineAsync("EndProject");
             }
-
-            string _FormatGuid(Guid guid) => "{" + guid.ToString("D").ToUpper() + "}";
         }
 
         private static async Task _WriteProjectSection(TextWriter writer, ProjectSection section)
@@ -89,25 +86,22 @@ namespace SolutionBuilder
             await writer.WriteLineAsync("\tEndProjectSection");
         }
 
-        public static async Task<string> ToString(ISolution solution)
-        {
-            var sb = new StringBuilder();
+        public static string Format(Guid guid) => "{" + guid.ToString("D").ToUpper() + "}";
 
-            using (var writer = new StringWriter(sb))
-            {
-                await WriteAsync(writer, solution);
-            }
-
-            return sb.ToString();
-        }
-
-        public static async Task WriteAsync(TextWriter writer, ISolution solution)
+        public static async Task WriteAsync(TextWriter writer, ISolution solution, string header)
         {
             // https://docs.microsoft.com/en-us/visualstudio/extensibility/internals/solution-dot-sln-file?view=vs-2019
-            await writer.WriteLineAsync("Microsoft Visual Studio Solution File, Format Version 12.00");
-            await writer.WriteLineAsync("# Visual Studio 15");
-            await writer.WriteLineAsync("VisualStudioVersion = 15.0.27703.2026");
-            await writer.WriteLineAsync("MinimumVisualStudioVersion = 10.0.40219.1");
+            if (!string.IsNullOrWhiteSpace(header))
+            {
+                await writer.WriteLineAsync(header.TrimEnd('\r', '\n'));
+            }
+            else
+            {
+                await writer.WriteLineAsync("Microsoft Visual Studio Solution File, Format Version 12.00");
+                await writer.WriteLineAsync("# Visual Studio 15");
+                await writer.WriteLineAsync("VisualStudioVersion = 15.0.27703.2026");
+                await writer.WriteLineAsync("MinimumVisualStudioVersion = 10.0.40219.1");
+            }
 
             await _WriteProjects(writer, solution.Projects);
             await _WriteGlobal(writer, solution.Global);

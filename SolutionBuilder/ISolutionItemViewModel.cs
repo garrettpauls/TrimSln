@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Onion.SolutionParser.Parser.Model;
+using ReactiveUI;
 
 namespace SolutionBuilder
 {
@@ -17,6 +18,11 @@ namespace SolutionBuilder
         }
 
         string Name
+        {
+            get;
+        }
+
+        Project Project
         {
             get;
         }

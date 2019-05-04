@@ -13,6 +13,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Open" Command="{Binding OpenCommand}" Margin="4" Padding="4" />
+            <Button Content="Save" Command="{Binding SaveCommand}" Margin="4" Padding="4" />
         </StackPanel>
         <TreeView Grid.Row="1" ItemsSource="{Binding Solution.Projects}">
             <TreeView.Resources>

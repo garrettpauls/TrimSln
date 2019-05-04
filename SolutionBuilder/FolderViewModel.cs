@@ -9,15 +9,12 @@ namespace SolutionBuilder
 {
     public sealed class FolderViewModel : ReactiveObject, ISolutionItemViewModel
     {
-        private readonly Project mProject;
-
         private bool mIsExpanded;
 
         public FolderViewModel(Project project, IReadOnlyCollection<(Project project, Guid? parentId)> allProjects)
         {
-            mProject = project;
+            Project = project;
 
-            IsFolder = project.TypeGuid == ProjectTypeIds.Folder;
             Children = allProjects
                 .Where(x => x.parentId == project.Guid)
                 .Select(x => SolutionViewModel.CreateItemViewModel(x.project, allProjects))
@@ -32,10 +29,6 @@ namespace SolutionBuilder
             get;
         }
 
-        public bool IsFolder
-        {
-            get;
-        }
 
         public bool IsExpanded
         {
@@ -76,6 +69,8 @@ namespace SolutionBuilder
             }
         }
 
-        public string Name => mProject.Name;
+        public string Name => Project.Name;
+
+        public Project Project { get; }
     }
 }
