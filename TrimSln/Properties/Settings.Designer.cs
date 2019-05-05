@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SolutionBuilder.Properties {
+namespace TrimSln.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

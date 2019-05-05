@@ -1,7 +1,7 @@
-﻿<Application x:Class="SolutionBuilder.App"
+﻿<Application x:Class="TrimSln.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SolutionBuilder"
+             xmlns:trimSln="clr-namespace:TrimSln"
              StartupUri="MainWindow.xaml"
              DispatcherUnhandledException="_UnhandledException">
     <Application.Resources>
@@ -18,7 +18,7 @@
                 <!-- Converters -->
                 <ResourceDictionary>
                     <BooleanToVisibilityConverter x:Key="ConvertBooleanToVisibleCollapsed" />
-                    <local:NullToVisibilityConverter x:Key="ConvertNullToVisible" />
+                    <trimSln:NullToVisibilityConverter x:Key="ConvertNullToVisible" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

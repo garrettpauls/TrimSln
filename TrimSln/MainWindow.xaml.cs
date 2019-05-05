@@ -2,7 +2,7 @@
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public partial class MainWindow : MetroWindow, IUserInteractionManager
     {
@@ -20,10 +20,7 @@ namespace SolutionBuilder
                 RestoreDirectory = true
             };
 
-            if (ofd.ShowDialog(this) ?? false)
-            {
-                return ofd.FileName;
-            }
+            if (ofd.ShowDialog(this) ?? false) return ofd.FileName;
 
             return null;
         }
@@ -37,10 +34,7 @@ namespace SolutionBuilder
                 OverwritePrompt = true
             };
 
-            if (sfd.ShowDialog(this) ?? false)
-            {
-                return sfd.FileName;
-            }
+            if (sfd.ShowDialog(this) ?? false) return sfd.FileName;
 
             return null;
         }

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Onion.SolutionParser.Parser.Model;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public static class SolutionWriter
     {
@@ -38,10 +38,7 @@ namespace SolutionBuilder
         {
             await writer.WriteLineAsync("Global");
 
-            foreach (var section in globals)
-            {
-                await _WriteGlobalSection(writer, section);
-            }
+            foreach (var section in globals) await _WriteGlobalSection(writer, section);
 
             await writer.WriteLineAsync("EndGlobal");
         }
@@ -49,10 +46,7 @@ namespace SolutionBuilder
         private static async Task _WriteGlobalSection(TextWriter writer, GlobalSection section)
         {
             await writer.WriteLineAsync($"\tGlobalSection({section.Name}) = {_Format(section.Type)}");
-            foreach (var entry in section.Entries)
-            {
-                await writer.WriteLineAsync($"\t\t{entry.Key} = {entry.Value}");
-            }
+            foreach (var entry in section.Entries) await writer.WriteLineAsync($"\t\t{entry.Key} = {entry.Value}");
 
             await writer.WriteLineAsync("\tEndGlobalSection");
         }
@@ -71,17 +65,11 @@ namespace SolutionBuilder
 
         private static async Task _WriteProjectSection(TextWriter writer, ProjectSection section)
         {
-            if (section == null)
-            {
-                return;
-            }
+            if (section == null) return;
 
             await writer.WriteLineAsync($"\tProjectSection({section.Name}) = {_Format(section.Type)}");
 
-            foreach (var entry in section.Entries)
-            {
-                await writer.WriteLineAsync($"\t\t{entry.Key} = {entry.Value}");
-            }
+            foreach (var entry in section.Entries) await writer.WriteLineAsync($"\t\t{entry.Key} = {entry.Value}");
 
             await writer.WriteLineAsync("\tEndProjectSection");
         }

@@ -4,7 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using ReactiveUI;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class MainWindowViewModel : ReactiveObject
     {
@@ -40,10 +40,7 @@ namespace SolutionBuilder
         private void _Open()
         {
             var file = mUserInteractionManager.PromptToOpenSolution();
-            if (file == null)
-            {
-                return;
-            }
+            if (file == null) return;
 
             var sln = SolutionViewModel.LoadFile(file);
             Solution = sln;
@@ -52,16 +49,10 @@ namespace SolutionBuilder
         private async void _Save()
         {
             var sln = Solution;
-            if (sln == null)
-            {
-                return;
-            }
+            if (sln == null) return;
 
             var file = mUserInteractionManager.PromptToSaveSolution(Path.GetDirectoryName(sln.FilePath));
-            if (file == null)
-            {
-                return;
-            }
+            if (file == null) return;
 
             await sln.SaveToFileAsync(file);
         }

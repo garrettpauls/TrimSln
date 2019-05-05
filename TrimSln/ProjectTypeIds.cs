@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class ProjectTypeIds
     {

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public class NullToVisibilityConverter : IValueConverter
     {

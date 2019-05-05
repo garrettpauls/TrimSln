@@ -11,7 +11,7 @@ using Onion.SolutionParser.Parser;
 using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class SolutionViewModel : ReactiveObject
     {
@@ -71,33 +71,20 @@ namespace SolutionBuilder
             {
                 yield return (item.Project, item.IsIncluded ?? true);
                 if (item is FolderViewModel folder)
-                {
-                    foreach (var child in folder.Children.SelectMany(Flatten))
-                    {
-                        yield return child;
-                    }
-                }
+                    foreach (var child in folder.Children.SelectMany(Flatten)) yield return child;
             }
         }
 
         private void _ForEachProject(Action<ISolutionItemViewModel> action)
         {
-            foreach (var item in Projects)
-            {
-                ForEachProject(item);
-            }
+            foreach (var item in Projects) ForEachProject(item);
 
             void ForEachProject(ISolutionItemViewModel item)
             {
                 action(item);
 
                 if (item is FolderViewModel folder)
-                {
-                    foreach (var child in folder.Children)
-                    {
-                        ForEachProject(child);
-                    }
-                }
+                    foreach (var child in folder.Children) ForEachProject(child);
             }
         }
 
@@ -110,10 +97,7 @@ namespace SolutionBuilder
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    if (line == null || line.StartsWith("Project", StringComparison.OrdinalIgnoreCase))
-                    {
-                        break;
-                    }
+                    if (line == null || line.StartsWith("Project", StringComparison.OrdinalIgnoreCase)) break;
 
                     sb.AppendLine(line);
                 }
@@ -126,7 +110,6 @@ namespace SolutionBuilder
         {
             var globals = new List<GlobalSection>();
             foreach (var section in mSolution.Global)
-            {
                 switch (section.Name)
                 {
                     case "ProjectConfigurationPlatforms":
@@ -150,7 +133,6 @@ namespace SolutionBuilder
                         globals.Add(section);
                         break;
                 }
-            }
 
             return globals;
         }
@@ -165,7 +147,6 @@ namespace SolutionBuilder
             // a bit of extra work to ensure projects stay in the same order
             // doesn't really matter, but makes the resulting solution a bit closer to the original
             foreach (var project in mSolution.Projects)
-            {
                 if (isProjectIncluded[project.Guid])
                 {
                     var newPath = relativePath + project.Path;
@@ -175,11 +156,9 @@ namespace SolutionBuilder
                     };
 
                     if (project.ProjectSection?.Name == "SolutionItems")
-                    {
                         project.ProjectSection.Entries = project
                             .ProjectSection.Entries
                             .ToDictionary(kvp => relativePath + kvp.Key, kvp => relativePath + kvp.Value);
-                    }
 
                     projects.Add(newProject);
                 }
@@ -187,7 +166,6 @@ namespace SolutionBuilder
                 {
                     removedProjects.Add(project.Guid);
                 }
-            }
 
             var globals = _GetTrimmedGlobals(removedProjects);
 
@@ -208,10 +186,7 @@ namespace SolutionBuilder
             IReadOnlyCollection<(Project project, Guid? parentId)> allProjects,
             IObservable<ProjectFilter> filter)
         {
-            if (project.TypeGuid == ProjectTypeIds.Folder)
-            {
-                return new FolderViewModel(project, allProjects, filter);
-            }
+            if (project.TypeGuid == ProjectTypeIds.Folder) return new FolderViewModel(project, allProjects, filter);
 
             return new ProjectViewModel(project, filter);
         }

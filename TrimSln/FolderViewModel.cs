@@ -4,9 +4,9 @@ using System.Linq;
 using DynamicData;
 using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
-using SolutionBuilder.Properties;
+using TrimSln.Properties;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class FolderViewModel : ReactiveObject, ISolutionItemViewModel
     {
@@ -49,32 +49,18 @@ namespace SolutionBuilder
         {
             get
             {
-                if (Children.Any(child => child.IsIncluded == null))
-                {
-                    return null;
-                }
+                if (Children.Any(child => child.IsIncluded == null)) return null;
 
                 var includedCount = Children.Count(child => child.IsIncluded ?? true);
-                if (includedCount == 0)
-                {
-                    return false;
-                }
-                if (includedCount == Children.Length)
-                {
-                    return true;
-                }
+                if (includedCount == 0) return false;
+                if (includedCount == Children.Length) return true;
 
                 return null;
             }
             set
             {
                 if (value.HasValue)
-                {
-                    foreach (var child in Children)
-                    {
-                        child.IsIncluded = value;
-                    }
-                }
+                    foreach (var child in Children) child.IsIncluded = value;
             }
         }
 

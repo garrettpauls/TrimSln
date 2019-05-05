@@ -1,7 +1,7 @@
 ﻿using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public interface ISolutionItemViewModel : IReactiveObject
     {

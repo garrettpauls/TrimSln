@@ -2,7 +2,7 @@
 using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class ProjectViewModel : ReactiveObject, ISolutionItemViewModel
     {

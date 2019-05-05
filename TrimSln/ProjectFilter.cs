@@ -2,7 +2,7 @@
 using Onion.SolutionParser.Parser.Model;
 using ReactiveUI;
 
-namespace SolutionBuilder
+namespace TrimSln
 {
     public sealed class ProjectFilter : ReactiveObject
     {
@@ -17,10 +17,7 @@ namespace SolutionBuilder
         public bool Matches(Project project)
         {
             var text = SearchText?.Trim();
-            if (string.IsNullOrEmpty(text))
-            {
-                return true;
-            }
+            if (string.IsNullOrEmpty(text)) return true;
 
             return project.Name.Contains(text, StringComparison.OrdinalIgnoreCase);
         }

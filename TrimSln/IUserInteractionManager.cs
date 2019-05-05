@@ -1,4 +1,4 @@
-﻿namespace SolutionBuilder
+﻿namespace TrimSln
 {
     public interface IUserInteractionManager
     {
