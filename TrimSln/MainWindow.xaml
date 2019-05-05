@@ -75,7 +75,7 @@
             </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="Focusable" Value="False" />
                     <Setter Property="Visibility"
                             Value="{Binding MatchesFilter, Converter={StaticResource ConvertBooleanToVisibleCollapsed}}" />
