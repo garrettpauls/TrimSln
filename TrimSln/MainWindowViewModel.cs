@@ -19,6 +19,7 @@ namespace TrimSln
             var canSave = this.WhenAnyValue(x => x.Solution).Select(sln => sln != null);
             SaveCommand = ReactiveCommand.Create(_Save, canSave, DispatcherScheduler.Current);
             OpenCommand = ReactiveCommand.Create(_Open, outputScheduler: DispatcherScheduler.Current);
+            SelectProjectsInSlnCommand = ReactiveCommand.Create(_SelectProjectsInSln, canSave, DispatcherScheduler.Current);
         }
 
         public ReactiveCommand<Unit, Unit> OpenCommand
@@ -31,10 +32,26 @@ namespace TrimSln
             get;
         }
 
+        public ReactiveCommand<Unit, Unit> SelectProjectsInSlnCommand
+        {
+            get;
+        }
+
         public SolutionViewModel Solution
         {
             get => mSolution;
             private set => this.RaiseAndSetIfChanged(ref mSolution, value);
+        }
+
+        private void _SelectProjectsInSln()
+        {
+            var sln = Solution;
+            if (sln == null) return;
+
+            var slnFile = mUserInteractionManager.PromptToOpenSolution();
+            if (slnFile == null) return;
+
+            sln.SelectProjectsInSolution(slnFile);
         }
 
         private void _Open()

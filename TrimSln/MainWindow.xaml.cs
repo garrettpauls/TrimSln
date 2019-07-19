@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
@@ -42,6 +44,19 @@ namespace TrimSln
         private void _HandleSearch(object sender, ExecutedRoutedEventArgs e)
         {
             mSearchBox.Focus();
+        }
+
+        private void _ShowContextMenu(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is FrameworkElement element)) return;
+
+            var menu = element.ContextMenu;
+            if (menu == null) return;
+
+            menu.PlacementTarget = element;
+            menu.Placement = PlacementMode.Bottom;
+            menu.IsOpen = true;
+            e.Handled = true;
         }
     }
 }

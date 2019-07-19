@@ -191,6 +191,24 @@ namespace TrimSln
             return new ProjectViewModel(project, filter);
         }
 
+        public IEnumerable<ProjectViewModel> GetAllProjects()
+        {
+            return Projects.SelectMany(Flatten);
+
+            IEnumerable<ProjectViewModel> Flatten(ISolutionItemViewModel item)
+            {
+                switch (item)
+                {
+                    case ProjectViewModel pvm:
+                        yield return pvm;
+                        break;
+                    case FolderViewModel fvm:
+                        foreach (var child in fvm.Children.SelectMany(Flatten)) yield return child;
+                        break;
+                }
+            }
+        }
+
         public static SolutionViewModel LoadFile(string file)
         {
             var solution = SolutionParser.Parse(file);
@@ -210,6 +228,28 @@ namespace TrimSln
             {
                 await SolutionWriter.WriteAsync(writer, updated, mHeader);
             }
+        }
+
+        public void SelectProjectsInSolution(string slnFile)
+        {
+            ISolution solution;
+            try
+            {
+                solution = SolutionParser.Parse(slnFile);
+            }
+            catch
+            {
+                return;
+            }
+
+            var projByPath = GetAllProjects()
+                .ToDictionary(proj => proj.Project.Path, StringComparer.OrdinalIgnoreCase);
+            foreach (var project in solution.Projects)
+                if (projByPath.TryGetValue(project.Path, out var vm))
+                {
+                    vm.IsIncluded = true;
+                    vm.IsExpanded = true;
+                }
         }
     }
 }
